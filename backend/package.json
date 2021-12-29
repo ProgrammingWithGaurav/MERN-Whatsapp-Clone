@@ -1,0 +1,17 @@
+{
+  "name": "whatsapp-backend",
+  "version": "1.0.0",
+  "description": "my whatsapp backend",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "programmingwithgaurav",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "express": "^4.17.2",
+    "mongoose": "^6.1.4"
+  }
+}
