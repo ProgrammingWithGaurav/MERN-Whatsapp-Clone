@@ -1,12 +1,17 @@
-
 import React, { useEffect, useState } from 'react';
 import './App.css';
 import Chat from './components/Chat/Chat';
 import Sidebar from './components/Sidebar/Sidebar';
 import Pusher from 'pusher-js';
 import axios from './axios';
+import Login from './components/Login/Login';
+import { useStateValue } from './StateProvider';
+import { auth } from 'firebase';
+import { BrowserRouter as Router, Switch, Route, useHistory, Link } from 'react-router-dom';
 
 function App() {
+  const history = useHistory();
+  const [{ user }, dispatch] = useStateValue();
   const [messages, setMessages] = useState([]);
   useEffect(() => {
     axios.get('/messages/sync')
@@ -14,6 +19,27 @@ function App() {
         console.log(response.data);
         setMessages(response.data);
       })
+  }, [])
+
+
+  useEffect(() => {
+    
+    auth().onAuthStateChanged(authUser => {
+      if (authUser) {
+        dispatch({
+          type: 'SET_USER',
+          user: {
+            name: authUser.displayName,
+            image: authUser.photoURL
+          }
+        })
+      } else {
+        dispatch({
+          type: 'SET_USER',
+          user: user
+        })
+      }
+    })
   }, [])
 
   useEffect(() => {
@@ -32,12 +58,27 @@ function App() {
     }
   }, [messages])
   return (
-    <div className='app'>
-      <div className="app__body">
-        <Sidebar />
-        <Chat messages={messages}/>
-      </div>
-    </div>
+    <Router>
+      <Switch>
+        <Route path='/login'>
+          <Login />
+        </Route>
+        <Route path='/' >
+          <div className='app'>
+            {!user.image && <Link style={{
+              all: 'unset',
+              background: 'white',
+              padding: '4px 10px',
+              cursor: 'pointer'
+            }} to='/login'>Login</Link>}
+            <div className="app__body">
+              <Sidebar />
+              <Chat messages={messages} />
+            </div >
+          </div >
+        </Route>
+      </Switch>
+    </Router>
   )
 }
 

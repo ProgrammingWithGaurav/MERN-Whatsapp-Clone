@@ -9,16 +9,18 @@ import MoreIcon from '@material-ui/icons/MoreVert';
 import InsertEmoticonIcon from '@material-ui/icons/InsertEmoticon';
 import MicIcon from '@material-ui/icons/Mic';
 import axios from '../../axios';
+import { useStateValue } from '../../StateProvider';
 
 function Chat({ messages }) {
+    const [{user}, dispatch] = useStateValue();
     const [input, setInput] = useState('');
     const sendMessage = (e) => {
         e.preventDefault();
         if (input !== '') {
             axios.post('/messages/new', {
                 message: input,
-                name: "gaurav",
-                timestamp: "far away",
+                name: user.name  ? user.name : 'Guest',
+                timestamp: new Date().toLocaleString(),
                 received: false
             })
             setInput('');
@@ -29,8 +31,8 @@ function Chat({ messages }) {
             <div className="chat__header">
                 <Avatar />
                 <div className="chat__headerInfo">
-                    <h3>Room name</h3>
-                    <p>Last seen at...</p>
+                    <h3>Chat</h3>
+                    <p>Last seen at 23:23:59</p>
                 </div>
 
                 <div className="chat__headerRight">
@@ -48,7 +50,7 @@ function Chat({ messages }) {
 
             <div className="chat__body">
                 {messages.map((message) => (
-                    <p key={message.timestamp} className={`chat__message ${message.received && 'chat__reciever'}`}>
+                    <p key={message.timestamp} className={`chat__message ${user?.name === message.name &&'chat__reciever'}`}>
                         <span className="chat__name">{message.name}</span>
                         {message.message}
                         <span className="chat__timestamp">
