@@ -8,6 +8,7 @@
 - Mongoose
 - Mongodb Atlas
 - ExpressJs
+- Pusher for realtime connection
 - ReactJS
 - Nodejs
 - firebase for authentication and hosting
