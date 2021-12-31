@@ -16,14 +16,12 @@ function App() {
   useEffect(() => {
     axios.get('/messages/sync')
       .then(response => {
-        console.log(response.data);
         setMessages(response.data);
       })
   }, [])
 
 
   useEffect(() => {
-    
     auth().onAuthStateChanged(authUser => {
       if (authUser) {
         dispatch({
@@ -34,13 +32,21 @@ function App() {
           }
         })
       } else {
-        dispatch({
-          type: 'SET_USER',
-          user: user
-        })
+        if (user === null) {
+          const username = prompt('Type your username to join', 'Your name');
+          if (username) {
+            dispatch({
+              type: 'SET_USER',
+              user: {
+                name: username
+              }
+            })
+          }
+        }
       }
     })
   }, [])
+
 
   useEffect(() => {
     let pusher = new Pusher('6116801065b3e3115d27', {
@@ -65,12 +71,6 @@ function App() {
         </Route>
         <Route path='/' >
           <div className='app'>
-            {!user.image && <Link style={{
-              all: 'unset',
-              background: 'white',
-              padding: '4px 10px',
-              cursor: 'pointer'
-            }} to='/login'>Login</Link>}
             <div className="app__body">
               <Sidebar />
               <Chat messages={messages} />

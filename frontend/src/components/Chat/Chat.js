@@ -12,14 +12,14 @@ import axios from '../../axios';
 import { useStateValue } from '../../StateProvider';
 
 function Chat({ messages }) {
-    const [{user}, dispatch] = useStateValue();
+    const [{ user }, dispatch] = useStateValue();
     const [input, setInput] = useState('');
     const sendMessage = (e) => {
         e.preventDefault();
         if (input !== '') {
             axios.post('/messages/new', {
                 message: input,
-                name: user.name  ? user.name : 'Guest',
+                name: user?.name ? user?.name : 'Guest',
                 timestamp: new Date().toLocaleString(),
                 received: false
             })
@@ -50,7 +50,7 @@ function Chat({ messages }) {
 
             <div className="chat__body">
                 {messages.map((message) => (
-                    <p key={message.timestamp} className={`chat__message ${user?.name === message.name &&'chat__reciever'}`}>
+                    <p key={message.timestamp} className={`chat__message ${user?.name === message.name && 'chat__reciever'}`}>
                         <span className="chat__name">{message.name}</span>
                         {message.message}
                         <span className="chat__timestamp">
