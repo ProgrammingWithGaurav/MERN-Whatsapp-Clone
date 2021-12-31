@@ -93,3 +93,12 @@
     padding: 10px;
     color: gray;
 }
+
+
+
+/* adding media queries for responsive  */
+@media screen and (max-width: 710px) {
+    .chat {
+        flex: 1;
+    }
+}

@@ -56,3 +56,11 @@
     background-color: white;
     overflow: scroll;
 }
+
+
+/* adding media queries for responsive  */
+@media screen and (max-width: 710px) {
+    .sidebar {
+        display: none;
+    }
+}
